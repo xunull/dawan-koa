@@ -20,7 +20,7 @@ module.exports = function * (next) {
         enumerable: true,
         configurable: false,
         writable: false
-    })
+    });
     yield next;
 
 }

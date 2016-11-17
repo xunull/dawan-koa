@@ -11,24 +11,23 @@ var nosession_store = require('../core/nosession_store');
 
 // nosessionid 不能仅仅是httponly
 // 否则ajax请求携带不了该session会被禁止访问
+// koa 的cookie 设置不了maxAge ?
 let defaultCookieOption = {
-    maxAge: 1200000, // 十分钟
+    // maxAge: 1200000, // 十分钟
     path: '/',
-    signed: true
+    signed: true,
+    httpOnly: false
 }
 
-exports.setSession = function(req, res, next) {
-    // 这里面会包括session id
-    // signedCookies 存储的都是签名过的cookie,
-    // 没有使用签名的cookie 就是在cookies对象中
-    let signedCookies = req.signedCookies;
-    let nosessionid = signedCookies.nosessionid;
+module.exports = function * (next) {
+
+    let nosessionid = this.cookies.get('nosessionid');
 
     if (undefined === nosessionid) {
         // 没有nosessionid
-        req.nosession = new Nosession();
-        req.nosessionid = req.nosession.nosessionid;
-        res.cookie('nosessionid', req.nosessionid, defaultCookieOption);
+        this.nosession = new Nosession();
+        this.nosessionid = this.nosession.nosessionid;
+        this.cookies.set('nosessionid', this.nosessionid, defaultCookieOption);
 
     } else {
         // 有nosessionid,但是本系统中不一定会有
@@ -37,25 +36,26 @@ exports.setSession = function(req, res, next) {
         let storedSession = nosession_store.getSession(nosessionid);
 
         if (undefined === storedSession) {
-            req.nosession = new Nosession();
-            req.nosessionid = req.nosession.nosessionid;
-            res.cookie('nosessionid', req.nosessionid, defaultCookieOption);
+            this.nosession = new Nosession();
+            this.nosessionid = this.nosession.nosessionid;
+            this.cookies.set('nosessionid', this.nosessionid, defaultCookieOption);
         } else {
             if (Date.now() > storedSession.expires_on) {
                 // session 已经过期
                 // 销毁上次的session
                 storedSession.destory();
 
-                req.nosession = new Nosession();
-                req.nosessionid = req.nosession.nosessionid;
-                res.cookie('nosessionid', req.nosessionid, defaultCookieOption);
+                this.nosession = new Nosession();
+                this.nosessionid = this.nosession.nosessionid;
+                this.cookies.set('nosessionid', this.nosessionid, defaultCookieOption);
             } else {
-                req.nosession = nosession_store.getSession(nosessionid);
-                req.nosessionid = req.nosession.nosessionid;
+                this.nosession = nosession_store.getSession(nosessionid);
+                this.nosessionid = this.nosession.nosessionid;
                 // 刷新一下cookie中 sessionid 的时间
-                res.cookie('nosessionid', req.nosessionid, defaultCookieOption);
+                this.cookies.set('nosessionid', this.nosessionid, defaultCookieOption);
             }
         }
     }
-    next();
+
+    yield next;
 }

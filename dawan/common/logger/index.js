@@ -1,9 +1,11 @@
 // winston的实现比log4js更全面
 var winstonLogger = require('./winston');
 
-var log4jsLogger = require('./log4js');
+// var log4jsLogger = require('./log4js');
 
-const defaultLogger = winstonLogger.defaultLogger;
+var defaultLogger = winstonLogger.defaultLogger;
+
+var loggerManage = require('./loggerManage');
 
 /**
  * 增加一个方法
@@ -19,5 +21,6 @@ defaultLogger.focus=function(obj) {
 
 module.exports = {
     defaultLogger:defaultLogger,
-    winstonLogger: winstonLogger.winstonLogger
+    winstonLogger: winstonLogger.winstonLogger,
+    getTraceLogger:loggerManage.getTraceLogger
 }

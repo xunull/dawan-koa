@@ -13,7 +13,7 @@ const loggerMap = new Map();
  * @param  {[type]} loggerName [description]
  * @return {[type]}            [description]
  */
-dawan.getLogger = function(loggerName) {
+global.dawan.getLogger = function(loggerName) {
     let logger = loggerMap.get(loggerName);
     if (undefined === logger) {
         logger = generateBusinessLogger(loggerName);
