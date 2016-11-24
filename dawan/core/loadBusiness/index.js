@@ -3,7 +3,7 @@ const common = require('../../common');
 const config = global.dawan.config;
 const logger = global.dawan.logger;
 // 非内建业务的目录地址
-const otherBusinessPath = config.otherBusinessPath;
+const otherBusinessPath = config.directoryConfig.businessPath;
 // 生成 各个业务的logger
 const decorateLogger = require('./decorateLogger');
 // 生成 业务的data 数据文件夹
@@ -16,9 +16,7 @@ var loadedOtherBusiness = [];
 
 (async function() {
     try {
-        // 加载内建业务
-        requireManifest(path.resolve(__dirname, '../../../business'));
-        // 加载添加的业务
+        // 加载业务逻辑
         requireManifest(otherBusinessPath);
     } catch (err) {
         logger.error(err);
