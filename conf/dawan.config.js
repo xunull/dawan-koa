@@ -14,6 +14,8 @@ const config = {
         errorFileName: 'error.log',
         level: 'debug'
     },
+    // 是否需要前端资源渲染的中间件
+    renderFile:false
 
 };
 

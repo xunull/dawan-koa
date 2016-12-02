@@ -1,12 +1,24 @@
 const ejs = require('ejs');
+const logger = global.dawan.logger;
 
 module.exports = function * (next) {
-    addReply();
+    logger.info('--------------')
+    logger.info(this.reply);
+    logger.info(typeof this.reply)
+    logger.info('++++++++++++++')
+
+    if(undefined===this.reply) {
+        logger.info('这个方法执行了');
+        addReply(this);
+    } else {
+        logger.info('this 已经有方法了')
+        logger.info(typeof this.reply)
+    }
 
     yield next;
 }
 
-function addReply() {
+function addReply(ctx) {
 
     function reply({
         ok = true,
@@ -14,11 +26,11 @@ function addReply() {
         error_code = 0,
         error_msg = ''
     }) {
-        this.type = 'application/json; charset=utf-8';
-        this.body = JSON.stringify({ok: ok, data: data, error_code: error_code, error_msg: error_msg});
+        ctx.type = 'application/json; charset=utf-8';
+        ctx.body = JSON.stringify({ok: ok, data: data, error_code: error_code, error_msg: error_msg});
     }
 
-    Object.defineProperty(this, 'reply', {
+    Object.defineProperty(ctx, 'reply', {
         value: reply,
         enumerable: true,
         configurable: false,
