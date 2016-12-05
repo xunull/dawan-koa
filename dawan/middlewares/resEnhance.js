@@ -8,11 +8,8 @@ module.exports = function * (next) {
     logger.info('++++++++++++++')
 
     if(undefined===this.reply) {
-        logger.info('这个方法执行了');
         addReply(this);
     } else {
-        logger.info('this 已经有方法了')
-        logger.info(typeof this.reply)
     }
 
     yield next;

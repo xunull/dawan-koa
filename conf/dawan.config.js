@@ -15,7 +15,8 @@ const config = {
         level: 'debug'
     },
     // 是否需要前端资源渲染的中间件
-    renderFile:false
+    renderFile:false,
+    requestTrace:true,// 请求跟踪
 
 };
 
