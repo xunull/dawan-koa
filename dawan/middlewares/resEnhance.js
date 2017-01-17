@@ -2,10 +2,6 @@ const ejs = require('ejs');
 const logger = global.dawan.logger;
 
 module.exports = function * (next) {
-    logger.info('--------------')
-    logger.info(this.reply);
-    logger.info(typeof this.reply)
-    logger.info('++++++++++++++')
 
     if(undefined===this.reply) {
         addReply(this);
