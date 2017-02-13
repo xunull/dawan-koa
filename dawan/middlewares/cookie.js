@@ -1,4 +1,4 @@
-const cookie = require('cookie');
+const cookie = require('cookie')
 
 module.exports = function * () {
     

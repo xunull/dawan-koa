@@ -18,6 +18,9 @@ var app = koa()
 global.dawan.koaApp=app
 
 // 1.错误处理
+// we can not just use try catch to handle all errors, 
+// steams' and events' errors are directly handle by ctx.onerror, 
+// so if we want to handle all errors in one place, the only way i can see is to hack ctx.onerror.
 onerror(app)
 
 // 2.session
@@ -35,14 +38,14 @@ app.use(session({
 app.use(bodyParser())
 
 // 加载app需要使用的中间件
-require('./base_middlewares')(app);
+require('./base_middlewares')(app)
 // 系统路由
-require('./router')(app);
+require('./router')(app)
 
 app.on('error', function(err, ctx) {
     console.error('server error', err, ctx)
 })
 
 // express，koa 都是可以监听多个端口的
-http.createServer(app.callback()).listen(config.port);
+http.createServer(app.callback()).listen(config.port)
 logger.info('app listennig on ',config.port)

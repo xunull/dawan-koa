@@ -2,26 +2,26 @@
  * 请求中间件跟踪
  *
  */
-const Trace = require('../core/trace/trace');
+const Trace = require('../core/trace/trace')
 const TraceReq = require('../core/trace/trace-req')
-const logger = global.dawan.logger;
-const getTraceLogger = require('../common').logger.getTraceLogger;
+const logger = global.dawan.logger
+const getTraceLogger = require('../common').logger.getTraceLogger
 
 module.exports = function* (next) {
 
     let traceReq = new TraceReq(this)
-    let trace = new Trace(traceReq);
-    intensive(this, trace);
-    yield next;
+    let trace = new Trace(traceReq)
+    intensive(this, trace)
+    yield next
 
     // 如果有debug 参数,会在控制台输出
     if(process.argv.includes('debug-trace')){
-        console.dir(trace);
+        console.dir(trace)
     }
 }
 
 function traceLog(msg, meta) {
-    this.trace.logs.push(msg);
+    this.trace.logs.push(msg)
 }
 
 function intensive(ctx, trace) {
