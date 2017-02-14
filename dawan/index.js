@@ -1,4 +1,4 @@
-require("babel-core/register");
+require('babel-core/register');
 
 require('./base_app');
 require('./base_web');

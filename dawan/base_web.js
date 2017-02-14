@@ -1,51 +1,49 @@
-var koa = require('koa')
-var bodyParser = require('koa-bodyparser')
-var session = require('koa-session')
-var onerror = require('koa-onerror')
+const koa = require('koa');
+const bodyParser = require('koa-bodyparser');
+const session = require('koa-session');
+const onerror = require('koa-onerror');
 
-var http = require('http')
+const http = require('http');
 
-var middlewares = require('./middlewares')
-
-const config = global.dawan.config
-const logger = global.dawan.logger
+const config = global.dawan.config;
+const logger = global.dawan.logger;
 
 // ****************************************************************
 // *********************基本中间件***********************************
 // ****************************************************************
 
-var app = koa()
-global.dawan.koaApp=app
+const app = koa();
+global.dawan.koaApp = app;
 
 // 1.错误处理
-// we can not just use try catch to handle all errors, 
-// steams' and events' errors are directly handle by ctx.onerror, 
+// we can not just use try catch to handle all errors,
+// steams' and events' errors are directly handle by ctx.onerror,
 // so if we want to handle all errors in one place, the only way i can see is to hack ctx.onerror.
-onerror(app)
+onerror(app);
 
 // 2.session
-const sessionSecret = config.session_secret
-app.keys = [sessionSecret]
+const sessionSecret = config.session_secret;
+app.keys = [sessionSecret];
 app.use(session({
     key: 'koa:sess',
     maxAge: 120000,
     overwirte: true,
     httpOnly: true,
-    signed: true
-}, app))
+    signed: true,
+}, app));
 
 // 3.body解析
-app.use(bodyParser())
+app.use(bodyParser());
 
 // 加载app需要使用的中间件
-require('./base_middlewares')(app)
+require('./base_middlewares')(app);
 // 系统路由
-require('./router')(app)
+require('./router')(app);
 
-app.on('error', function(err, ctx) {
-    console.error('server error', err, ctx)
-})
+app.on('error', (err, ctx) => {
+    console.error('server error', err, ctx);
+});
 
 // express，koa 都是可以监听多个端口的
-http.createServer(app.callback()).listen(config.port)
-logger.info('app listennig on ',config.port)
+http.createServer(app.callback()).listen(config.port);
+logger.info('app listennig on ', config.port);
