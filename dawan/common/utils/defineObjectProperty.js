@@ -10,20 +10,19 @@
  * @param  {[type]} obj [description]
  * @return {[type]}     [description]
  */
-exports.reinforceObject = function(obj) {
-
-    for (let tempObj of arguments) {
-        let keys = Object.getOwnPropertyNames(tempObj);
-        for (let key of keys) {
+exports.reinforceObject = function (...objs) {
+    for (const tempObj of objs) {
+        const keys = Object.getOwnPropertyNames(tempObj);
+        for (const key of keys) {
             Object.defineProperty(tempObj, key, {
                 value: tempObj[key],
                 enumerable: true,
                 configurable: false,
-                writable: false
+                writable: false,
             });
         }
     }
-}
+};
 
 /**
  * 加固对象的某个指定属性名
@@ -31,11 +30,11 @@ exports.reinforceObject = function(obj) {
  * @param  {[type]} propertyName [description]
  * @return {[type]}              [description]
  */
-exports.reinforceObjectOneObject = function(obj, propertyName) {
+exports.reinforceObjectOneObject = function (obj, propertyName) {
     Object.defineProperty(obj, propertyName, {
         vlaue: obj[propertyName],
         enumerable: true,
         configurable: false,
-        writable: false
-    })
-}
+        writable: false,
+    });
+};
