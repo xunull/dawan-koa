@@ -4,9 +4,9 @@ const config = require('../conf/dawan.config');
 const logger = common.logger.defaultLogger;
 
 const dawan = {
-    common: common,
-    logger: logger,
-    config: config,
+    common,
+    logger,
+    config,
 };
 
 /**
@@ -35,5 +35,5 @@ module.exports = global.dawan;
  * @return {[type]}                     [description]
  */
 process.on('uncaughtException', (err) => {
-    console.log(err);
+    logger.error(err);
 });
